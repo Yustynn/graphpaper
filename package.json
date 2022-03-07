@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "lodash": "^4.17.21",
+    "pdfjs-dist": "^2.13.216",
+    "three": "^0.138.3"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^21.0.2",
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^13.1.3"
+  }
+}

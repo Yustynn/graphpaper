@@ -1,4 +1,7 @@
 import { x } from './test'
+import pdf from 'pdfjs-dist'
+import * as _ from 'lodash'
 
-console.log('Sup world?!')
-console.log(`x is ${x}`)
+console.log('pdf', pdf)
+console.log('lodash', _)
+console.log(x)
