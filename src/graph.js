@@ -4,18 +4,40 @@ import * as d3Force from 'd3-force'
 import {
     GRAPH_DATA_PATH,
     LINK_COLORS,
+    LINK_THICKNESS,
+    NODE_COLORS,
     NODE_SIZE,
     SVG_HEIGHT,
     SVG_WIDTH,
 } from './constants'
 
-function setupNodes(content, data) {
+function setupNodes(content, data, selectedNodes) {
     const nodes = content.append('g').attr('id', 'nodes')
 
     const node = nodes.selectAll('g')
         .data(data.nodes)
         .enter()
         .append('g')
+    
+    node
+        .on('click', function(_, {id}) {
+            const selectedNodes = new Set()
+            selectedNodes.add(id)
+            data.links
+                .filter(l => l.source.id == id || l.target.id == id)
+                .forEach(l => {
+                    selectedNodes.add(l.source.id)
+                    selectedNodes.add(l.target.id)
+                })
+            
+
+            node.transition().style('opacity', d => selectedNodes.has(d.id) ? 1 : 0 )
+            select(this).select('rect')
+                .style('fill', 'orange')
+            
+
+
+        })
 
     node.each(function (d) {
         // rectangle
@@ -24,7 +46,7 @@ function setupNodes(content, data) {
                 .attr('width', NODE_SIZE)
                 .attr('height', NODE_SIZE)
                 .attr('x', -NODE_SIZE/2)
-                .style('fill', 'yellow')
+                .style('fill', d => d.id == 0 ? NODE_COLORS.root : NODE_COLORS.default)
                 .style('stroke', 'black')
                 .style('stroke-width', 2)
 
@@ -32,8 +54,18 @@ function setupNodes(content, data) {
         select(this)
             .append('text')
             .text(d => d.text)
+            .style('dominant-baseline', 'middle')
             .attr('dx', -NODE_SIZE/2)
             .attr('dy', NODE_SIZE/2)
+
+        // node id text for debugging
+        select(this)
+            .append('text')
+            .style('dominant-baseline', 'middle')
+            .text(d => 'ID: ' + d.id)
+            .attr('dx', -NODE_SIZE/2)
+            .attr('dy', 10)
+
     })
 
     return node
@@ -47,9 +79,8 @@ function setupLinks(content, data) {
         .data(data.links)
         .enter()
             .append('line')
-            .style('dominant-baseline', 'middle')
             .style('stroke', d => LINK_COLORS[d.kind])
-            .style('stroke-width', 2)
+            .style('stroke-width', LINK_THICKNESS)
             .attr('class', d => `link ${d.kind}`)
 }
 
@@ -68,6 +99,7 @@ function makeTicked(node, link) {
 
 export default async function makeGraph(content) {
     const data = await d3Fetch.json(GRAPH_DATA_PATH);
+    document.data = data // for debugging
     const link = setupLinks(content, data)
     const node = setupNodes(content, data)
 

@@ -6,11 +6,19 @@ export const LINK_COLORS = {
     chunk: 'white',
     definition: 'red',
     elaboration: 'orange',
-    example: 'purple',
+    example: 'pink',
     premise: 'green',
-    synonym: 'blue',
+    synonym: 'skyblue',
 }
 
-export const [SVG_WIDTH, SVG_HEIGHT] = [1000, 700]
+export const NODE_COLORS = {
+    default: 'yellow',
+    root: 'white',
+}
+
 export const GRAPH_DATA_PATH = './data/graph.json'
+
+export const [SVG_WIDTH, SVG_HEIGHT] = [1000, 700]
+
+export const LINK_THICKNESS = 5
 export const NODE_SIZE = 150
