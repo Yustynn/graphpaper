@@ -1,6 +1,8 @@
 import { select } from 'd3-selection'
 import * as d3Fetch from 'd3-fetch'
 import * as d3Force from 'd3-force'
+import { textwrap } from 'd3-textwrap'
+
 import {
     GRAPH_DATA_PATH,
     LINK_COLORS,
@@ -46,17 +48,22 @@ function setupNodes(content, data, selectedNodes) {
                 .attr('width', NODE_SIZE)
                 .attr('height', NODE_SIZE)
                 .attr('x', -NODE_SIZE/2)
+                .attr('rx', 20)
                 .style('fill', d => d.id == 0 ? NODE_COLORS.root : NODE_COLORS.default)
                 .style('stroke', 'black')
                 .style('stroke-width', 2)
 
         // text
-        select(this)
+        const text = select(this)
             .append('text')
             .text(d => d.text)
             .style('dominant-baseline', 'middle')
+            .call(textwrap()
+                .bounds({height: NODE_SIZE, width: NODE_SIZE})
+                .method('tspans')
+            )
             .attr('dx', -NODE_SIZE/2)
-            .attr('dy', NODE_SIZE/2)
+
 
         // node id text for debugging
         select(this)
