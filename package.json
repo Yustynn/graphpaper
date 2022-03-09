@@ -1,8 +1,8 @@
 {
   "dependencies": {
-    "lodash": "^4.17.21",
-    "pdfjs-dist": "^2.13.216",
-    "three": "^0.138.3"
+    "d3": "^7.3.0",
+    "katex": "^0.15.2",
+    "lodash": "^4.17.21"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^21.0.2",
