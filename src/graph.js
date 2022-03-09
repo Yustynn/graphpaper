@@ -2,11 +2,11 @@ import { select } from 'd3-selection'
 import * as d3Fetch from 'd3-fetch'
 import * as d3Force from 'd3-force'
 import {
+    GRAPH_DATA_PATH,
+    LINK_COLORS,
+    NODE_SIZE,
     SVG_HEIGHT,
     SVG_WIDTH,
-    LINK_COLORS,
-    GRAPH_DATA_PATH,
-    NODE_SIZE
 } from './constants'
 
 function setupNodes(content, data) {
@@ -21,12 +21,12 @@ function setupNodes(content, data) {
         // rectangle
         select(this)
             .append('rect')
-            .attr('width', NODE_SIZE)
-            .attr('height', NODE_SIZE)
-            .attr('x', -NODE_SIZE/2)
-            .style('fill', 'yellow')
-            .style('stroke', 'black')
-            .style('stroke-width', 2)
+                .attr('width', NODE_SIZE)
+                .attr('height', NODE_SIZE)
+                .attr('x', -NODE_SIZE/2)
+                .style('fill', 'yellow')
+                .style('stroke', 'black')
+                .style('stroke-width', 2)
 
         // text
         select(this)
@@ -46,11 +46,11 @@ function setupLinks(content, data) {
     return links.selectAll('line')
         .data(data.links)
         .enter()
-        .append('line')
-        .style('dominant-baseline', 'middle')
-        .style('stroke', d => LINK_COLORS[d.kind])
-        .style('stroke-width', 2)
-        .attr('class', d => `link ${d.kind}`)
+            .append('line')
+            .style('dominant-baseline', 'middle')
+            .style('stroke', d => LINK_COLORS[d.kind])
+            .style('stroke-width', 2)
+            .attr('class', d => `link ${d.kind}`)
 }
 
 function makeTicked(node, link) {
@@ -68,8 +68,8 @@ function makeTicked(node, link) {
 
 export default async function makeGraph(content) {
     const data = await d3Fetch.json(GRAPH_DATA_PATH);
-    const node = setupNodes(content, data)
     const link = setupLinks(content, data)
+    const node = setupNodes(content, data)
 
     const sim = d3Force.forceSimulation(data.nodes)
         .force('link', d3Force.forceLink()

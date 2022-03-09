@@ -3,12 +3,12 @@ export const COLORS = {
 }
 
 export const LINK_COLORS = {
-    definition: 'red',
-    synonym: 'blue',
-    elaboration: 'orange',
-    premise: 'green',
-    example: 'purple',
     chunk: 'white',
+    definition: 'red',
+    elaboration: 'orange',
+    example: 'purple',
+    premise: 'green',
+    synonym: 'blue',
 }
 
 export const [SVG_WIDTH, SVG_HEIGHT] = [1000, 700]
