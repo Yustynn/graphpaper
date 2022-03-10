@@ -121,18 +121,28 @@ function makeTicked(node, link) {
         link
             .attr('x1', d => {
                 // if s on right of t, then arrow should start from left side of s
-                if (d.source.x > d.target.x) return d.source.x - NODE_WIDTH/2 + LINK_BUFFER
+                if (d.source.x > d.target.x) return d.source.x - NODE_WIDTH/2
                 // else arrow should touch right side of t
-                return d.source.x + NODE_WIDTH/2 - LINK_BUFFER
+                return d.source.x + NODE_WIDTH/2
             })
-            .attr('y1', d => d.source.y + NODE_HEIGHT/2)
+            .attr('y1', d => {
+                // if s below t, then arrow should start from bottom side of s
+                if (d.source.y < d.target.y) return d.source.y + NODE_HEIGHT/2
+                // else arrow should start from top side of s
+                return d.source.y
+            })
             .attr('x2', d => {
                 // if s on right of t, then arrow should touch right side of t
                 if (d.source.x > d.target.x) return d.target.x + NODE_WIDTH/2
                 // else arrow should touch left side of t
                 return d.target.x - NODE_WIDTH/2
             })
-            .attr('y2', d => d.target.y + NODE_HEIGHT/2)
+            .attr('y2', d => {
+                // if s above t, then arrow should touch top side of t
+                if (d.source.y < d.target.y) return d.target.y - NODE_HEIGHT/2
+                // else arrow should touch bottom side of t
+                return d.target.y + NODE_HEIGHT/2
+            })
 
         node.attr('transform', d => `translate(${d.x + 6},${d.y - 6})`)
     }
