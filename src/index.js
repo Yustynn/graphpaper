@@ -1,5 +1,6 @@
 import makeGraph from './graph'
 import setupSvg from './setup'
+import makePanel from './panel'
 import katex from 'katex'
 
 
@@ -24,7 +25,8 @@ function mathTest(svg) {
 
 async function main() {
   const { svg, content } = setupSvg()
-  await makeGraph(content)
+  const panel = makePanel(svg)
+  await makeGraph(content, panel)
   mathTest(svg)
 }
 

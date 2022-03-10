@@ -1,5 +1,6 @@
 export const COLORS = {
-    1: '#2D4263'
+    1: '#2D4263',
+    2: '#242424',
 }
 
 export const LINK_COLORS = {

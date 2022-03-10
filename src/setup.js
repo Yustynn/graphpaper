@@ -1,21 +1,17 @@
 import { select } from 'd3-selection'
 import * as d3Zoom from 'd3-zoom'
-import { SVG_HEIGHT, SVG_WIDTH, COLORS } from './constants'
+import { COLORS } from './constants'
 
 
 export default function setupSvg() {
   // Setup SVG and content container, with zoom/pan
 
   const svg = select('#svg-container').append('svg')
-    // .attr('width', SVG_WIDTH)
-    // .attr('height', SVG_HEIGHT)
     .attr('width', '100%')
     .attr('height', '100%')
 
   // make background
   svg.append('rect')
-    // .attr('width', SVG_WIDTH)
-    // .attr('height', SVG_HEIGHT)
     .attr('width', '100%')
     .attr('height', '100%')
     .attr('fill', COLORS[1])

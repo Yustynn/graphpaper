@@ -1,7 +1,7 @@
 import { select } from 'd3-selection'
 import * as d3Fetch from 'd3-fetch'
 import * as d3Force from 'd3-force'
-import { easeLinear } from 'd3'
+import { transition, easeLinear } from 'd3'
 import { textwrap } from 'd3-textwrap'
 import katex from 'katex'
 
@@ -16,7 +16,7 @@ import {
     WIDTH,
 } from './constants'
 
-function setupNodes(content, data, link) {
+function setupNodes(content, data, link, panel) {
     const nodes = content.append('g').attr('id', 'nodes')
 
     const node = nodes.selectAll('g')
@@ -34,23 +34,24 @@ function setupNodes(content, data, link) {
                     selectedNodes.add(l.source.id)
                     selectedNodes.add(l.target.id)
                 })
+
+            const t = transition()
+                .duration(200)
+                .ease(easeLinear)
             
 
-            node.transition()
-                .duration(200)
-                .ease(easeLinear)
+            node.transition(t)
                 .style('opacity', d => selectedNodes.has(d.id) ? 1 : 0 )
 
-            link.transition()
-                .duration(200)
-                .ease(easeLinear)
+            link.transition(t)
                 .style('opacity', l => l.source.id == id || l.target.id == id ? 1 : 0 )
 
             select(this).select('rect')
                 .style('fill', 'orange')
-            
 
-
+            panel
+                .transition()
+                .style('transform', 'translate(0,0)')
         })
 
     node.each(function (d) {
@@ -74,6 +75,7 @@ function setupNodes(content, data, link) {
 
         const span = foreignObject.append("xhtml:span")
             .text(d.text)
+
         // katex.render(d.text, span.node());
         // const text = select(this)
         //     .append('text')
@@ -143,17 +145,17 @@ async function loadData() {
 }
 
 
-export default async function makeGraph(content) {
+export default async function makeGraph(content, panel) {
     const data = await loadData()
     const link = setupLinks(content, data)
-    const node = setupNodes(content, data, link)
+    const node = setupNodes(content, data, link, panel)
 
     const sim = d3Force.forceSimulation(data.nodes)
         .force('link', d3Force.forceLink()
             .id(d => d.id)
             .links(data.links)
         )
-        .force('charge', d3Force.forceManyBody().strength(-1000))
+        .force('charge', d3Force.forceManyBody().strength(-500))
         .force('center', d3Force.forceCenter(WIDTH / 2, HEIGHT / 2))
         .force('collision', d3Force.forceCollide(NODE_SIZE-1).iterations(3))
         .on('end', makeTicked(node, link))
