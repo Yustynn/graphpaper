@@ -22,5 +22,6 @@ export const GRAPH_DATA_PATH = './data/graph.json'
 export const [WIDTH, HEIGHT] = [1000, 700]
 
 export const LINK_THICKNESS = 7
-export const NODE_SIZE = 150
+export const NODE_WIDTH = 250
+export const NODE_HEIGHT = 100
 export const NODE_PADDING = 10

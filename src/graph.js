@@ -10,7 +10,8 @@ import {
     LINK_THICKNESS,
     NODE_COLORS,
     NODE_PADDING,
-    NODE_SIZE,
+    NODE_WIDTH,
+    NODE_HEIGHT,
     HEIGHT,
     WIDTH,
 } from './constants'
@@ -62,9 +63,9 @@ function setupNodes(content, data, link, panel) {
         // rectangle
         select(this)
             .append('rect')
-                .attr('width', NODE_SIZE)
-                .attr('height', NODE_SIZE)
-                .attr('x', -NODE_SIZE/2)
+                .attr('width', NODE_WIDTH)
+                .attr('height', NODE_HEIGHT)
+                .attr('x', -NODE_WIDTH/2)
                 .attr('rx', 10)
                 .style('fill', d => d.id == 0 ? NODE_COLORS.root : NODE_COLORS.default)
                 .style('stroke', 'black')
@@ -73,9 +74,9 @@ function setupNodes(content, data, link, panel) {
         // text
         const p = select(this)
             .append('foreignObject')
-                .attr('height', NODE_SIZE - 2*NODE_PADDING)
-                .attr('width', NODE_SIZE - 2*NODE_PADDING)
-                .attr('x', -NODE_SIZE/2 + NODE_PADDING)
+                .attr('width', NODE_WIDTH - 2*NODE_PADDING)
+                .attr('height', NODE_HEIGHT - 2*NODE_PADDING)
+                .attr('x', -NODE_WIDTH/2 + NODE_PADDING)
                 .attr('y', NODE_PADDING)
                 .append('xhtml:p')
         
@@ -87,27 +88,13 @@ function setupNodes(content, data, link, panel) {
         }
 
 
-        // katex.render(d.text, span.node());
-        // const text = select(this)
-        //     .append('text')
-        //     .text(d => d.text)
-        //     .style('dominant-baseline', 'middle')
-        //     .call(textwrap()
-        //         .bounds({height: NODE_SIZE, width: NODE_SIZE})
-        //         .method('tspans')
-        //     )
-        //     .attr('dx', -NODE_SIZE/2)
-
-
-
-
         // node id text for debugging
         select(this)
             .append('text')
             .style('dominant-baseline', 'middle')
             .text(d => 'ID: ' + d.id)
-            .attr('dx', -NODE_SIZE/2+NODE_PADDING)
-            .attr('dy', NODE_SIZE-20)
+            .attr('dx', -NODE_WIDTH/2+NODE_PADDING)
+            .attr('dy', NODE_HEIGHT-20)
 
     })
 
@@ -134,18 +121,18 @@ function makeTicked(node, link) {
         link
             .attr('x1', d => {
                 // if s on right of t, then arrow should start from left side of s
-                if (d.source.x > d.target.x) return d.source.x - NODE_SIZE/2 + LINK_BUFFER
+                if (d.source.x > d.target.x) return d.source.x - NODE_WIDTH/2 + LINK_BUFFER
                 // else arrow should touch right side of t
-                return d.source.x + NODE_SIZE/2 - LINK_BUFFER
+                return d.source.x + NODE_WIDTH/2 - LINK_BUFFER
             })
-            .attr('y1', d => d.source.y + NODE_SIZE/2)
+            .attr('y1', d => d.source.y + NODE_HEIGHT/2)
             .attr('x2', d => {
                 // if s on right of t, then arrow should touch right side of t
-                if (d.source.x > d.target.x) return d.target.x + NODE_SIZE/2
+                if (d.source.x > d.target.x) return d.target.x + NODE_WIDTH/2
                 // else arrow should touch left side of t
-                return d.target.x - NODE_SIZE/2
+                return d.target.x - NODE_WIDTH/2
             })
-            .attr('y2', d => d.target.y + NODE_SIZE/2)
+            .attr('y2', d => d.target.y + NODE_HEIGHT/2)
 
         node.attr('transform', d => `translate(${d.x + 6},${d.y - 6})`)
     }
@@ -164,7 +151,7 @@ export default async function makeGraph(content, panel) {
         )
         .force('charge', d3Force.forceManyBody().strength(100))
         .force('center', d3Force.forceCenter(WIDTH / 2, HEIGHT / 2))
-        .force('collision', d3Force.forceCollide(NODE_SIZE-1).iterations(3))
+        .force('collision', d3Force.forceCollide(Math.max(NODE_WIDTH, NODE_HEIGHT)-1).iterations(3))
         .on('end', makeTicked(node, link))
         .tick(500)
 
