@@ -18,7 +18,8 @@ export const NODE_COLORS = {
 
 export const GRAPH_DATA_PATH = './data/graph.json'
 
-export const [SVG_WIDTH, SVG_HEIGHT] = [1000, 700]
+export const [WIDTH, HEIGHT] = [1000, 700]
 
-export const LINK_THICKNESS = 5
+export const LINK_THICKNESS = 7
 export const NODE_SIZE = 150
+export const NODE_PADDING = 10
