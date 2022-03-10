@@ -51,7 +51,7 @@ function setupNodes(content, data, link, panel) {
 
             panel
                 .transition()
-                .style('transform', 'translate(0,0)')
+                .style('transform', `translate(${window.innerWidth/2}px,0)`)
         })
 
     node.each(function (d) {
