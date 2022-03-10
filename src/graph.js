@@ -162,7 +162,7 @@ export default async function makeGraph(content, panel) {
             .id(d => d.id)
             .links(data.links)
         )
-        .force('charge', d3Force.forceManyBody().strength(-500))
+        .force('charge', d3Force.forceManyBody().strength(100))
         .force('center', d3Force.forceCenter(WIDTH / 2, HEIGHT / 2))
         .force('collision', d3Force.forceCollide(NODE_SIZE-1).iterations(3))
         .on('end', makeTicked(node, link))

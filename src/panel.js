@@ -1,6 +1,12 @@
-import { COLORS } from './constants'
+import { COLORS, LINK_COLORS } from './constants'
 import katex from 'katex'
 import store from './store'
+
+function mkText(parent, element, text, cls) {
+    return parent.append(element)
+        .text(text)
+        .attr('class', cls)
+}
 
 export default function(svg) {
     const panel = svg.append('g')
@@ -16,28 +22,24 @@ export default function(svg) {
             .style('height', '100%')
 
     // node content
-    panelContent.append('h1')
-        .text('Node Content')
-        .attr('class', 'node-content')
-    panelContent.append('p')
-        .text('Whatever stuff lol')
-        .attr('class', 'node-content')
+    mkText(panelContent, 'h1', 'Node Content', 'node-content')
+    mkText(panelContent, 'p', 'Node Content', 'node-content')
 
     // node-context
-    panelContent.append('h1')
-        .text('Context')
-        .attr('class', 'node-context')
-    panelContent.append('p')
-        .text('Whatever stuff lol')
-        .attr('class', 'node-context')
+    mkText(panelContent, 'h1', 'Node Context', 'node-context')
+    mkText(panelContent, 'p', 'Node Context', 'node-context')
+
+    // incoming links
+    mkText(panelContent, 'h1', 'Incoming Links', 'incoming-links')
+    mkText(panelContent, 'p', 'Incoming Links', 'incoming-links')
+
+    // outgoing links
+    mkText(panelContent, 'h1', 'Outgoing Links', 'outgoing-links')
+    mkText(panelContent, 'p', 'Outgoing Links', 'outgoing-links')
 
     // narrative
-    panelContent.append('h1')
-        .text('Narrative')
-        .attr('class', 'narrative')
-    panelContent.append('p')
-        .text('Whatever stuff lol')
-        .attr('class', 'narrative')
+    mkText(panelContent, 'h1', 'Narrative', 'narrative')
+    mkText(panelContent, 'p', 'Narrative', 'narrative')
 
     panel.update = update.bind(panel)
 
@@ -56,9 +58,34 @@ function update() {
         else katex.render(text, span.node())
     }
 
+    const incomingLinks = {}
+    const outgoingLinks = {}
+    store.data.links.forEach(l => {
+        if (l.target.id == store.selectedNode.id) {
+            if (!incomingLinks[l.kind]) incomingLinks[l.kind] = [l.source.id]
+            else incomingLinks[l.kind].push(l.source.id)
+        }
+        if (l.source.id == store.selectedNode.id) {
+            if (!outgoingLinks[l.kind]) outgoingLinks[l.kind] = [l.target.id]
+            else outgoingLinks[l.kind].push(l.target.id)
+        }
+    })
+
     this.select('p.node-context')
         .text('')
 
     this.select('p.narrative')
         .text('Nah bruh')
+
+    for (const [links, cls] of [[incomingLinks, 'incoming-links'], [outgoingLinks, 'outgoing-links']]) {
+        const p = this.select(`p.${cls}`)
+        p.html('')
+        Object.keys(links).forEach(k => p.append('p')
+            .text(`${k}: ${links[k].length} links`)
+            .style('background-color', LINK_COLORS[k])
+            .style('display', 'inline-block')
+            .style('padding', '5px 10px')
+        )
+
+    }
 }
