@@ -125,15 +125,28 @@ function setupLinks(content, data) {
             .style('stroke', d => LINK_COLORS[d.kind])
             .style('stroke-width', LINK_THICKNESS)
             .attr('class', d => `link ${d.kind}`)
+            .attr('marker-end', 'url(#arrowhead)')
 }
 
 function makeTicked(node, link) {
+    const LINK_BUFFER = 10
     return () => {
         link
-            .attr('x1', d => d.source.x)
-            .attr('y1', d => d.source.y)
-            .attr('x2', d => d.target.x)
-            .attr('y2', d => d.target.y)
+            .attr('x1', d => {
+                // if s on right of t, then arrow should start from left side of s
+                if (d.source.x > d.target.x) return d.source.x - NODE_SIZE/2 + LINK_BUFFER
+                // else arrow should touch right side of t
+                return d.source.x + NODE_SIZE/2 - LINK_BUFFER
+            })
+            .attr('y1', d => d.source.y + NODE_SIZE/2)
+            .attr('x2', d => {
+                // if s on right of t, then arrow should touch right side of t
+                if (d.source.x > d.target.x) return d.target.x + NODE_SIZE/2
+                // else arrow should touch left side of t
+                return d.target.x - NODE_SIZE/2
+            })
+            .attr('y2', d => d.target.y + NODE_SIZE/2)
+            .attr('lol', d => console.log('d', d))
 
         node.attr('transform', d => `translate(${d.x + 6},${d.y - 6})`)
     }
