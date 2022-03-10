@@ -1,12 +1,10 @@
 import { select } from 'd3-selection'
-import * as d3Fetch from 'd3-fetch'
 import * as d3Force from 'd3-force'
 import { transition, easeLinear } from 'd3'
 import store from './store'
-import katex from 'katex'
+import loadData from './loadData'
 
 import {
-    GRAPH_DATA_PATH,
     LINK_COLORS,
     LINK_THICKNESS,
     NODE_COLORS,
@@ -131,22 +129,6 @@ function makeTicked(node, link) {
 
         node.attr('transform', d => `translate(${d.x + 6},${d.y - 6})`)
     }
-}
-
-async function loadData() {
-    const data = await d3Fetch.json(GRAPH_DATA_PATH);
-
-    // for now, just remove context
-    data.nodes = data.nodes.map(n => {
-        if (!n.text) return n
-
-        n.text = n.text.replaceAll(/%(.+?)\|/g, '').replaceAll('%', '')
-        return n
-    })
-
-    store.data = data
-
-    return data
 }
 
 

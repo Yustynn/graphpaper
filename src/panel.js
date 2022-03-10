@@ -1,4 +1,5 @@
 import { COLORS } from './constants'
+import katex from 'katex'
 import store from './store'
 
 export default function(svg) {
@@ -42,10 +43,48 @@ export default function(svg) {
 
     return panel
 }
+
+function getTextChunks() {
+    // this is a hacky solution to render latex :(
+
+    const { text } = store.selectedNode
+    const matches = text.match(/\$.*?\$/g)
+    let chunks = [{ text, kind: 'text'}]
+
+    for (let match of matches) {
+        const processedChunks = []
+        for (let chunk of chunks) {
+            if (chunk.kind != 'text') {
+                processedChunks.push(chunk)
+                continue
+            }
+            const currChunks = chunk.text.split(match)
+
+            for (let currChunk of currChunks.slice(0, currChunks.length-1)) {
+                processedChunks.push({ text: currChunk, kind: 'text' })
+                processedChunks.push({text: match.replaceAll('$', ''), kind: 'latex'})
+            }
+            processedChunks.push({ text: currChunks[currChunks.length-1], kind: 'text' })
+        }
+        chunks = processedChunks
+    }
+
+    return chunks
+}
+
 function update() {
-    this.select('p.node-content')
-        .text(store.selectedNode.text)
-    
+    const chunks = getTextChunks()
+
+    const nodeContent = this.select('p.node-content')
+    nodeContent.html('')
+
+    for (const { kind, text } of chunks) {
+        const span = nodeContent.append('span')
+
+        if (kind == 'text') span.text(text)
+        else katex.render(text, span.node())
+    }
+
     this.select('p.node-context')
         .text('')
 
