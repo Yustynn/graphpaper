@@ -8,7 +8,7 @@ export const LINK_COLORS = {
     definition: 'red',
     elaboration: 'orange',
     example: 'pink',
-    premise: 'green',
+    support: 'green',
     synonym: 'skyblue',
 }
 
