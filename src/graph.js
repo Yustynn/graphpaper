@@ -1,6 +1,7 @@
 import { select } from 'd3-selection'
 import * as d3Force from 'd3-force'
 import { transition, easeLinear } from 'd3'
+import katex from 'katex'
 import store from './store'
 import loadData from './loadData'
 
@@ -70,14 +71,21 @@ function setupNodes(content, data, link, panel) {
                 .style('stroke-width', 2)
 
         // text
-        const foreignObject = select(this).append('foreignObject')
-            .attr('height', NODE_SIZE - 2*NODE_PADDING)
-            .attr('width', NODE_SIZE - 2*NODE_PADDING)
-            .attr('x', -NODE_SIZE/2 + NODE_PADDING)
-            .attr('y', NODE_PADDING)
+        const p = select(this)
+            .append('foreignObject')
+                .attr('height', NODE_SIZE - 2*NODE_PADDING)
+                .attr('width', NODE_SIZE - 2*NODE_PADDING)
+                .attr('x', -NODE_SIZE/2 + NODE_PADDING)
+                .attr('y', NODE_PADDING)
+                .append('xhtml:p')
+        
+        for (const { kind, text } of d.textChunks) {
+            const span = p.append('span')
 
-        const span = foreignObject.append("xhtml:span")
-            .text(d.text)
+            if (kind == 'text') span.text(text)
+            else katex.render(text, span.node())
+        }
+
 
         // katex.render(d.text, span.node());
         // const text = select(this)
