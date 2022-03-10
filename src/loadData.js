@@ -11,6 +11,7 @@ export default async function loadData() {
 
         n.text = n.text.replaceAll(/%(.+?)\|/g, '').replaceAll('%', '')
         n.textChunks = mkTextChunks(n.text)
+
         return n
     })
 
@@ -24,8 +25,6 @@ function mkTextChunks(text) {
 
     const matches = text.match(/\$.*?\$/g)
     let chunks = [{ text, kind: 'text'}]
-
-    console.log(text, chunks, matches)
 
     if (matches === null) return chunks
 

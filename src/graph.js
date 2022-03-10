@@ -146,7 +146,6 @@ function makeTicked(node, link) {
                 return d.target.x - NODE_SIZE/2
             })
             .attr('y2', d => d.target.y + NODE_SIZE/2)
-            .attr('lol', d => console.log('d', d))
 
         node.attr('transform', d => `translate(${d.x + 6},${d.y - 6})`)
     }
