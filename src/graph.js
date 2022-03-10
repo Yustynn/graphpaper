@@ -2,7 +2,7 @@ import { select } from 'd3-selection'
 import * as d3Fetch from 'd3-fetch'
 import * as d3Force from 'd3-force'
 import { transition, easeLinear } from 'd3'
-import { textwrap } from 'd3-textwrap'
+import store from './store'
 import katex from 'katex'
 
 import {
@@ -25,14 +25,17 @@ function setupNodes(content, data, link, panel) {
         .append('g')
     
     node
-        .on('click', function(_, {id}) {
-            const selectedNodes = new Set()
-            selectedNodes.add(id)
+        .on('click', function(_, n) {
+            const { id } = n
+            store.selectedNode = n
+
+            store.visibleNodes.clear()
+            store.visibleNodes.add(id)
             data.links
                 .filter(l => l.source.id == id || l.target.id == id)
                 .forEach(l => {
-                    selectedNodes.add(l.source.id)
-                    selectedNodes.add(l.target.id)
+                    store.visibleNodes.add(l.source.id)
+                    store.visibleNodes.add(l.target.id)
                 })
 
             const t = transition()
@@ -41,7 +44,7 @@ function setupNodes(content, data, link, panel) {
             
 
             node.transition(t)
-                .style('opacity', d => selectedNodes.has(d.id) ? 1 : 0 )
+                .style('opacity', d => store.visibleNodes.has(d.id) ? 1 : 0 )
 
             link.transition(t)
                 .style('opacity', l => l.source.id == id || l.target.id == id ? 1 : 0 )
@@ -50,8 +53,10 @@ function setupNodes(content, data, link, panel) {
                 .style('fill', 'orange')
 
             panel
-                .transition()
+                .transition(t)
                 .style('transform', `translate(${window.innerWidth/2}px,0)`)
+
+            panel.update()
         })
 
     node.each(function (d) {
@@ -139,7 +144,7 @@ async function loadData() {
         return n
     })
 
-    document.data = data // for debugging
+    store.data = data
 
     return data
 }
