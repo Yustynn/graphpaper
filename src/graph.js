@@ -39,7 +39,7 @@ function setupNodes(content, data, link, panel) {
                 })
 
             const t = transition()
-                .duration(200)
+                .duration(100)
                 .ease(easeLinear)
             
 
@@ -50,10 +50,11 @@ function setupNodes(content, data, link, panel) {
                 .style('opacity', l => l.source.id == id || l.target.id == id ? 1 : 0 )
 
             select(this).select('rect')
-                .style('fill', 'orange')
+                .attr('fill', 'white')
 
             panel
-                .transition(t)
+                .transition()
+                .duration(300)
                 .style('transform', `translate(${window.innerWidth/2}px,0)`)
 
             panel.update()
