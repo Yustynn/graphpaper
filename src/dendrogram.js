@@ -1,10 +1,32 @@
 import { HEIGHT, WIDTH } from './constants'
 import * as d3Hierarchy from 'd3-hierarchy'
 
+const NODE_X_SPACING = 50
+const NODE_Y_SPACING = 50
+
+function getMaxDepthAndNumLeafNodes(node, depth=0) {
+  if (node.children.length == 0) {
+    return { numLeafNodes: 1, depth }
+  }
+
+  let maxDepth = depth
+  let numLeafNodes = 0
+  for (let child of node.children) {
+    const res = getMaxDepthAndNumLeafNodes(child, depth+1)
+    numLeafNodes += res.numLeafNodes
+    maxDepth = Math.max(maxDepth, res.depth)
+  }
+
+  return { depth: maxDepth, numLeafNodes: numLeafNodes }
+
+}
+
 export default function main(content, data) {
+  const { depth, numLeafNodes } = getMaxDepthAndNumLeafNodes(data)
   // Create the cluster layout:
   const cluster = d3Hierarchy.cluster()
-    .size([HEIGHT, WIDTH]);
+    .size([NODE_X_SPACING * depth, NODE_Y_SPACING * numLeafNodes]);
+
   
 
   // Give the data to this cluster layout:
