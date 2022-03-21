@@ -1,7 +1,7 @@
 // Very crappily-coded module to make some mock data
 
 const LINK_KINDS = ['definition', 'support', 'elaboration']
-const SOFT_MAX_ID_THRESHOLD = 20
+const SOFT_MAX_ID_THRESHOLD = 300
 
 export default function main(maxNumChildren=3) {
     const nodes = []
@@ -28,6 +28,8 @@ export default function main(maxNumChildren=3) {
 
         const node = { id, text, children }
         nodes.push(node)
+
+        if (node.length == 1) return populateNodes(nodes, maxNumChildren, overrideNumChildren)
 
         return node
     }
