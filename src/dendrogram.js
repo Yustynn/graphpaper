@@ -14,30 +14,27 @@ export default function main(content, data) {
   cluster(root);
 
   // add straight links between nodes
-  content.selectAll('line')
+  content.selectAll('polyline')
     .data(root.descendants().slice(1))
     .enter()
-      .append('line')
-      .attr('x1', d => d.parent.y)
-      .attr('y1', d => d.parent.x)
-      .attr('x2', d => d.y)
-      .attr('y2', d => d.x)
-      .attr('stroke', '#ccc')
+      .append('polyline')
+      .attr('points', d => {
+        // not sure why I had to invert the coords, but I did.:w
 
-  // Add curved links between nodes:
-  // svg.selectAll('path')
-  //   .data( root.descendants().slice(1) )
-  //   .enter()
-  //   .append('path')
-  //   .attr("d", function(d) {
-  //     // console.log(d)
-  //       return "M" + d.y + "," + d.x
-  //               + "C" + (d.parent.y + 50) + "," + d.x
-  //               + " " + (d.parent.y + 50) + "," + d.parent.x // 50 and 150 are coordinates of inflexion, play with it to change links shape
-  //               + " " + d.parent.y + "," + d.parent.x;
-  //             })
-  //   .style("fill", 'none')
-  //   .attr("stroke", '#ccc')
+        const [x, y] = [d.y, d.x]
+        const [px, py] = [d.parent.y, d.parent.x]
+        const points = [
+          [x, y],
+          [x, py],
+          [px, py]
+        ]
+
+        return points
+          .map(p => p.join(', '))
+          .join(' ')
+      })
+      .attr('stroke', '#ccc')
+      .attr('fill', 'none')
 
 
   // Add a circle for each node.
