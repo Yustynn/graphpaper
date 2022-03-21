@@ -1,6 +1,6 @@
 import { select } from 'd3-selection'
 import * as d3Zoom from 'd3-zoom'
-import { COLORS } from './constants'
+import { COLORS, HEIGHT, WIDTH } from './constants'
 
 
 export default function setupSvg() {
@@ -9,6 +9,7 @@ export default function setupSvg() {
     const svg = select('#svg-container').append('svg')
         .attr('width', '100%')
         .attr('height', '100%')
+        .attr('viewbox', `0 0 ${WIDTH} ${HEIGHT}`)
 
     svg.append('defs')
         .html(`  <defs>
