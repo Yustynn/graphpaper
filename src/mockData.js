@@ -1,7 +1,8 @@
 /*
-    Badly-coded module to make some mock data
 
-    - Badly coded because of the crappy use of scope
+Badly-coded module to make some mock data
+- Badly coded because of the crappy use of scope
+
 */
 
 import { sample, shuffle } from 'lodash'

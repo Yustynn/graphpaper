@@ -11,10 +11,8 @@ async function main() {
   // const panel = makePanel(svg)
   // await makeGraph(content, panel)
   const raw = mockData({ pRandomLink: 0.0 })
-  const processed = processData(raw)
-  dendrogram(content, processed)
-
-  console.log(processed)
+  const data = processData(raw)
+  dendrogram(content, data.nodes)
 }
 
 main()
