@@ -3,12 +3,14 @@
 const LINK_KINDS = ['definition', 'support', 'elaboration']
 const SOFT_MAX_ID_THRESHOLD = 50
 
-export default function main(maxNumChildren=3) {
+export default function main(maxNumChildren=3, minNodes=10) {
     const nodes = []
 
     let currId = 0
     populateNodes(nodes, maxNumChildren=maxNumChildren)
     const links = mkLinks(nodes)
+
+    if (nodes.length < minNodes) return main(maxNumChildren, minNodes)
 
     return { nodes, links }
 
