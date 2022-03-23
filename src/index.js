@@ -25,14 +25,14 @@ async function main() {
   // await makeGraph(content, panel)
   const raw = mockData({
     pRandomLink: 0.1,
-    minNumNodes: 100,
-    maxNumNodes: 200,
+    minNumNodes: 50,
+    maxNumNodes: 100,
   })
   const data = processData(raw)
   removeNonCanonicalLinks(data)
 
   console.log(data)
-  // dendrogram(content, data.nodes)
+  dendrogram(content, data.nodes)
 }
 
 main()
