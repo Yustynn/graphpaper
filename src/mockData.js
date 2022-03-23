@@ -42,8 +42,6 @@ export default function main({maxNumChildren=3, minNumNodes=10, maxNumNodes=20, 
         const node = { id, text, children }
         nodes.push(node)
 
-        if (node.length == 1) return populateNodes(nodes, maxNumChildren, overrideNumChildren)
-
         return node
     }
 }
@@ -73,7 +71,9 @@ function mkLinks(nodes, pRandomLink) {
 
             const p = Math.random()
             if (p < pRandomLink) {
-                const link = mkLink(id, Math.floor(Math.random() * nodes.length))
+                let link = mkLink(id, Math.floor(Math.random() * nodes.length))
+                while (link.target == id) mkLink(id, Math.floor(Math.random() * nodes.length))
+
                 links.push(link)
             }
         }
