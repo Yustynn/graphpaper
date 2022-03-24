@@ -3,7 +3,6 @@ import setupSvg from './setup'
 import makePanel from './panel'
 import mockData from './mockData'
 import processData from './processData'
-import dendrogram from './dendrogram'
 import tidyTree from './tidyTree'
 
 function removeNonCanonicalLinks(data) {
@@ -33,7 +32,6 @@ async function main() {
   removeNonCanonicalLinks(data)
 
   console.log(data)
-  // dendrogram(content, data.nodes)
   tidyTree(content, data)
 }
 
