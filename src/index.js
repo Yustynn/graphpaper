@@ -4,6 +4,7 @@ import makePanel from './panel'
 import mockData from './mockData'
 import processData from './processData'
 import dendrogram from './dendrogram'
+import tidyTree from './tidyTree'
 
 function removeNonCanonicalLinks(data) {
   const visited = new Set()
@@ -24,15 +25,16 @@ async function main() {
   // const panel = makePanel(svg)
   // await makeGraph(content, panel)
   const raw = mockData({
-    pRandomLink: 0.1,
-    minNumNodes: 50,
-    maxNumNodes: 100,
+    pRandomLink: 0.2,
+    minNumNodes: 30,
+    maxNumNodes: 50,
   })
   const data = processData(raw)
   removeNonCanonicalLinks(data)
 
   console.log(data)
-  dendrogram(content, data.nodes)
+  // dendrogram(content, data.nodes)
+  tidyTree(content, data)
 }
 
 main()

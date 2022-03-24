@@ -10,6 +10,8 @@ export default function setupSvg() {
         .attr('width', '100%')
         .attr('height', '100%')
         .attr('viewbox', `0 0 ${WIDTH} ${HEIGHT}`)
+        .attr("font-family", "sans-serif")
+        .attr("font-size", 10);
 
     svg.append('defs')
         .html(`  <defs>
