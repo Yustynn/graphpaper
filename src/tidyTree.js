@@ -1,4 +1,5 @@
 import * as d3 from 'd3'
+import { WIDTH, HEIGHT } from './constants'
 
 export default function main(content, data) {
     return Tree(data.nodes, {
@@ -6,7 +7,8 @@ export default function main(content, data) {
         title: (d, n) => `${n.ancestors().reverse().map(d => d.data.name).join(".")}`, // hover text
         width: 1152,
         content,
-        nonCanonicalLinks: data.nonCanonicalLinks
+        nonCanonicalLinks: data.nonCanonicalLinks,
+        textColor: '#bbb',
       })
 }
 
@@ -45,18 +47,17 @@ function Tree(data, { // data is either tabular (array of objects) or hierarchy 
     title, // given a node d, returns its hover text
     link, // given a node d, its link (if any)
     linkTarget = "_blank", // the target attribute for links (if any)
-    width = 640, // outer width, in pixels
-    height, // outer height, in pixels
     r = 3, // radius of nodes
     padding = 1, // horizontal padding for first and last column
-    fill = "#999", // fill for nodes
-    stroke = "#555", // stroke for links
+    fill = "MediumSeaGreen", // fill for nodes
+    stroke = "#aaa", // stroke for links
     strokeWidth = 1.5, // stroke width for links
     strokeOpacity = 0.4, // stroke opacity for links
     strokeLinejoin, // stroke line join for links
     strokeLinecap, // stroke line cap for links
     content,
     nonCanonicalLinks,
+    textColor = 'white',
   } = {}) {
     // If id and parentId options are specified, or the path option, use d3.stratify
     // to convert tabular data to a hierarchy; otherwise we assume that the data is
@@ -75,7 +76,7 @@ function Tree(data, { // data is either tabular (array of objects) or hierarchy 
   
     // Compute the layout.
     const dx = 10;
-    const dy = width / (root.height + padding);
+    const dy = WIDTH / (root.height + padding);
     tree().nodeSize([dx, dy])(root);
   
     // Center the tree.
@@ -86,9 +87,6 @@ function Tree(data, { // data is either tabular (array of objects) or hierarchy 
       if (d.x < x0) x0 = d.x;
     });
   
-    // Compute the default height.
-    if (height === undefined) height = x1 - x0 + dx * 2;
-
     console.log('root.links()', root.links())
   
   
@@ -128,6 +126,7 @@ function Tree(data, { // data is either tabular (array of objects) or hierarchy 
         .text(d => title(d.data, d));
   
     if (L) node.append("text")
+        .attr('fill', textColor)
         .attr("dy", "0.32em")
         .attr("x", d => d.children ? -6 : 6)
         .attr("text-anchor", d => d.children ? "end" : "start")
