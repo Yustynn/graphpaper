@@ -1,5 +1,6 @@
 import * as d3 from 'd3'
-import { WIDTH, HEIGHT } from './constants'
+import { WIDTH, HEIGHT, NODE_WIDTH, NODE_HEIGHT, NODE_PADDING } from './constants'
+import katex from 'katex'
 
 export default function main(content, data) {
 
@@ -72,8 +73,10 @@ function Tree(data, { // data is either tabular (array of objects) or hierarchy 
     if (sort != null) root.sort(sort);
   
     // Compute the layout.
-    const dx = 100;
-    const dy = WIDTH / (root.height + padding);
+    // const dx = 100;
+    // const dy = WIDTH / (root.height + padding);
+    const dx = NODE_HEIGHT + 50
+    const dy = NODE_WIDTH + 50
     tree().nodeSize([dx, dy])(root);
   
     // Center the tree.
@@ -115,21 +118,39 @@ function Tree(data, { // data is either tabular (array of objects) or hierarchy 
 
     node.append("rect")
         .attr("fill", d => d.children ? stroke : fill)
-        .attr("width", 100)
-        .attr("height", 40)
+        .attr("width", NODE_WIDTH)
+        .attr("height", NODE_HEIGHT)
         .attr("dy", -dy/2)
   
     if (title != null) node.append("title")
         .text(d => title(d.data, d));
   
-    node.append("text")
-        .attr('fill', textColor)
-        .attr("dy", "0.32em")
-        .attr("x", d => 2)
-        .attr("text-anchor", d => d.children ? "end" : "start")
-        .text((n) => n.data.text )
-        .call(text => text.clone(true))
-        .attr("fill", "none")
+    node.each(function (d) {
+        // text
+        const p = d3.select(this)
+            .append('foreignObject')
+                .attr('width', NODE_WIDTH - 2*NODE_PADDING)
+                .attr('height', NODE_HEIGHT - 2*NODE_PADDING)
+                .attr('x', -NODE_WIDTH/2 + NODE_PADDING)
+                .attr('y', NODE_PADDING)
+                .append('xhtml:p')
+        
+        for (const { kind, text } of d.data.textChunks) {
+            const span = p.append('span')
+
+            if (kind == 'text') span.text(text)
+            else katex.render(text, span.node())
+        }
+    })
+
+    // node.append("text")
+    //     .attr('fill', textColor)
+    //     .attr("dy", "0.32em")
+    //     .attr("x", d => 2)
+    //     .attr("text-anchor", d => d.children ? "end" : "start")
+    //     .text((n) => n.data.text )
+    //     .call(text => text.clone(true))
+    //     .attr("fill", "none")
   
     return content.node();
   }
