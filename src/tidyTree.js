@@ -72,7 +72,7 @@ function Tree(data, allData, panel, { // data is either tabular (array of object
     // const dx = 100;
     // const dy = WIDTH / (root.height + padding);
     const dx = NODE_HEIGHT + 50
-    const dy = NODE_WIDTH + 50
+    const dy = NODE_WIDTH + 100
     tree().nodeSize([dx, dy])(root);
 
     // Center the tree.
@@ -119,7 +119,8 @@ function Tree(data, allData, panel, { // data is either tabular (array of object
         .attr("fill", d => d.children ? stroke : fill)
         .attr("width", NODE_WIDTH)
         .attr("height", NODE_HEIGHT)
-        .attr("dy", -dy / 2)
+        .attr("x", -NODE_WIDTH/2)
+        .attr("y", -NODE_HEIGHT/2)
 
     // if (title != null) node.append("title")
     //     .text(d => title(d.data, d));
@@ -131,8 +132,8 @@ function Tree(data, allData, panel, { // data is either tabular (array of object
             .append('foreignObject')
             .attr('width', NODE_WIDTH - 2 * NODE_PADDING)
             .attr('height', NODE_HEIGHT - 2 * NODE_PADDING)
-            .attr('x', NODE_PADDING)
-            .attr('y', NODE_PADDING)
+            .attr('x', NODE_PADDING - NODE_WIDTH/2)
+            .attr('y', NODE_PADDING - NODE_HEIGHT/2)
             .append('xhtml:p')
 
         for (const { kind, text } of d.data.textChunks) {
@@ -180,7 +181,6 @@ function setupNodeOnClick(node, link, data, panel) {
             d3.select(this).select('rect')
                 .attr('fill', 'white')
 
-            console.log('panel', panel)
             panel
                 .transition()
                 .duration(300)
