@@ -2,6 +2,7 @@ import makeGraph from './graph'
 import setupSvg from './setup'
 import makePanel from './panel'
 import mockData from './mockData'
+import loadData from './loadData'
 import processData from './processData'
 import tidyTree from './tidyTree'
 
@@ -21,18 +22,27 @@ function removeNonCanonicalLinks(data) {
 
 async function main() {
   const { svg, content } = setupSvg()
-  // const panel = makePanel(svg)
+  const panel = makePanel(svg)
   // await makeGraph(content, panel)
-  const raw = mockData({
-    pRandomLink: 0.2,
-    minNumNodes: 30,
-    maxNumNodes: 50,
-  })
-  console.log('raw', raw)
+
+  const raw = await loadData()
+  // there's an error in the data where source and target are swapped. This is a temp fix.
+  raw.links = raw.links.map(l => ({ ...l, source: l.target, target: l.source})) 
+  console.log('raw2', raw)
+
+  // const idToNode = {}
+  // for (const node of raw2.nodes) idToNode[node.id] = node
+
+  // for (const { source, target } of raw2.links) {
+  //   const node = idToNode[source]
+  //   if (!node.children) node.children = []
+  //   node.children.push(idToNode[target])
+  // }
+
   const data = processData(raw)
+  console.log('data', data)
   removeNonCanonicalLinks(data)
 
-  console.log(data)
   tidyTree(content, data)
 }
 

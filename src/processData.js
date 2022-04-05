@@ -1,10 +1,13 @@
 import _ from 'lodash'
 
 export default function main(data) {
+    data = _.cloneDeep(data)
     addChildren(data)
     addParents(data)
     addDepth(data)
     addCanonicalParent(data)
+
+    console.log(data)
 
 
     return {

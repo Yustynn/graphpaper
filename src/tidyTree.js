@@ -2,6 +2,7 @@ import * as d3 from 'd3'
 import { WIDTH, HEIGHT } from './constants'
 
 export default function main(content, data) {
+
     return Tree(data.nodes, {
         label: d => d.id,
         title: (d, n) => `${n.ancestors().reverse().map(d => d.data.name).join(".")}`, // hover text
@@ -67,10 +68,6 @@ function Tree(data, { // data is either tabular (array of objects) or hierarchy 
         : id != null || parentId != null ? d3.stratify().id(id).parentId(parentId)(data)
         : d3.hierarchy(data, children);
   
-    // Compute labels and titles.
-    const descendants = root.descendants();
-    const L = label == null ? null : descendants.map(d => label(d.data, d));
-  
     // Sort the nodes.
     if (sort != null) root.sort(sort);
   
@@ -86,9 +83,6 @@ function Tree(data, { // data is either tabular (array of objects) or hierarchy 
       if (d.x > x1) x1 = d.x;
       if (d.x < x0) x0 = d.x;
     });
-  
-    console.log('root.links()', root.links())
-  
   
     const pathContainer = content.append("g")
         .attr("fill", "none")
@@ -128,12 +122,12 @@ function Tree(data, { // data is either tabular (array of objects) or hierarchy 
     if (title != null) node.append("title")
         .text(d => title(d.data, d));
   
-    if (L) node.append("text")
+    node.append("text")
         .attr('fill', textColor)
         .attr("dy", "0.32em")
         .attr("x", d => 2)
         .attr("text-anchor", d => d.children ? "end" : "start")
-        .text((d, i) => L[i])
+        .text((n) => n.data.text )
         .call(text => text.clone(true))
         .attr("fill", "none")
   
