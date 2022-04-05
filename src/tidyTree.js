@@ -131,7 +131,7 @@ function Tree(data, { // data is either tabular (array of objects) or hierarchy 
             .append('foreignObject')
                 .attr('width', NODE_WIDTH - 2*NODE_PADDING)
                 .attr('height', NODE_HEIGHT - 2*NODE_PADDING)
-                .attr('x', -NODE_WIDTH/2 + NODE_PADDING)
+                .attr('x', NODE_PADDING)
                 .attr('y', NODE_PADDING)
                 .append('xhtml:p')
         
@@ -143,14 +143,5 @@ function Tree(data, { // data is either tabular (array of objects) or hierarchy 
         }
     })
 
-    // node.append("text")
-    //     .attr('fill', textColor)
-    //     .attr("dy", "0.32em")
-    //     .attr("x", d => 2)
-    //     .attr("text-anchor", d => d.children ? "end" : "start")
-    //     .text((n) => n.data.text )
-    //     .call(text => text.clone(true))
-    //     .attr("fill", "none")
-  
     return content.node();
   }
