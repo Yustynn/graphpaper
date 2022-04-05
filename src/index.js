@@ -28,22 +28,13 @@ async function main() {
   const raw = await loadData()
   // there's an error in the data where source and target are swapped. This is a temp fix.
   raw.links = raw.links.map(l => ({ ...l, source: l.target, target: l.source})) 
-  console.log('raw2', raw)
-
-  // const idToNode = {}
-  // for (const node of raw2.nodes) idToNode[node.id] = node
-
-  // for (const { source, target } of raw2.links) {
-  //   const node = idToNode[source]
-  //   if (!node.children) node.children = []
-  //   node.children.push(idToNode[target])
-  // }
+  console.log('raw', raw)
 
   const data = processData(raw)
   console.log('data', data)
   removeNonCanonicalLinks(data)
 
-  tidyTree(content, data)
+  tidyTree(content, data, panel)
 }
 
 main()
