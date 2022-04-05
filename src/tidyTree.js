@@ -75,7 +75,7 @@ function Tree(data, { // data is either tabular (array of objects) or hierarchy 
     if (sort != null) root.sort(sort);
   
     // Compute the layout.
-    const dx = 10;
+    const dx = 100;
     const dy = WIDTH / (root.height + padding);
     tree().nodeSize([dx, dy])(root);
   
@@ -118,9 +118,12 @@ function Tree(data, { // data is either tabular (array of objects) or hierarchy 
         .attr("target", link == null ? null : linkTarget)
         .attr("transform", d => `translate(${d.y},${d.x})`);
   
-    node.append("circle")
+
+    node.append("rect")
         .attr("fill", d => d.children ? stroke : fill)
-        .attr("r", r);
+        .attr("width", 100)
+        .attr("height", 40)
+        .attr("dy", -dy/2)
   
     if (title != null) node.append("title")
         .text(d => title(d.data, d));
@@ -128,7 +131,7 @@ function Tree(data, { // data is either tabular (array of objects) or hierarchy 
     if (L) node.append("text")
         .attr('fill', textColor)
         .attr("dy", "0.32em")
-        .attr("x", d => d.children ? -6 : 6)
+        .attr("x", d => 2)
         .attr("text-anchor", d => d.children ? "end" : "start")
         .text((d, i) => L[i])
         .call(text => text.clone(true))

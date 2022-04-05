@@ -28,6 +28,7 @@ async function main() {
     minNumNodes: 30,
     maxNumNodes: 50,
   })
+  console.log('raw', raw)
   const data = processData(raw)
   removeNonCanonicalLinks(data)
 
