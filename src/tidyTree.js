@@ -1,5 +1,5 @@
 import * as d3 from 'd3'
-import { NODE_WIDTH, NODE_HEIGHT, NODE_PADDING } from './constants'
+import { NODE_WIDTH, NODE_HEIGHT, NODE_PADDING, LINK_COLORS } from './constants'
 import katex from 'katex'
 import store from './store'
 import _ from 'lodash'
@@ -11,6 +11,7 @@ export default function main(content, data, panel) {
         width: 1152,
         content,
         nonCanonicalLinks: data.nonCanonicalLinks,
+        canonicalLinks: data.canonicalLinks,
         textColor: '#bbb',
     })
 }
@@ -29,12 +30,11 @@ function rootToNodeMap(root) {
     }
 }
 
-function processNonCanonicalLinks(rawNonCanonicalLinks, nodeMap) {
-    return rawNonCanonicalLinks.map(l => ({
+function processRawLinks(rawLinks, nodeMap) {
+    return rawLinks.map(l => ({
         source: nodeMap.get(l.source),
         target: nodeMap.get(l.target),
         kind: l.kind
-
     }))
 }
 
@@ -51,11 +51,11 @@ function Tree(data, allData, panel, { // data is either tabular (array of object
     fill = "MediumSeaGreen", // fill for nodes
     stroke = "#aaa", // stroke for links
     strokeWidth = 3, // stroke width for links
-    strokeOpacity = 0.4, // stroke opacity for links
     strokeLinejoin, // stroke line join for links
     strokeLinecap, // stroke line cap for links
     content,
     nonCanonicalLinks,
+    canonicalLinks,
 } = {}) {
     // If id and parentId options are specified, or the path option, use d3.stratify
     // to convert tabular data to a hierarchy; otherwise we assume that the data is
@@ -86,22 +86,22 @@ function Tree(data, allData, panel, { // data is either tabular (array of object
     const pathContainer = content.append("g")
         .attr("fill", "none")
         .attr("stroke", stroke)
-        .attr("stroke-opacity", strokeOpacity)
         .attr("stroke-linecap", strokeLinecap)
         .attr("stroke-linejoin", strokeLinejoin)
         .attr("stroke-width", strokeWidth)
 
     const nodeMap = rootToNodeMap(root)
-    const nonCanonicalLinksProcessed = processNonCanonicalLinks(nonCanonicalLinks, nodeMap)
-    console.log('nonCanonicalLinksProcessed', nonCanonicalLinksProcessed)
+    const nonCanonicalLinksProcessed = processRawLinks(nonCanonicalLinks, nodeMap)
+    const canonicalLinksProcessed = processRawLinks(canonicalLinks, nodeMap)
 
     const link = pathContainer
         .selectAll("path")
-        .data([...root.links(), ...nonCanonicalLinksProcessed])
+        .data([...canonicalLinksProcessed, ...nonCanonicalLinksProcessed])
         .join("path")
         .attr("d", d3.linkHorizontal()
             .x(d => d.y)
             .y(d => d.x))
+            .attr('stroke', d => LINK_COLORS[d.kind])
 
 
 
@@ -151,7 +151,6 @@ function Tree(data, allData, panel, { // data is either tabular (array of object
 
 
 function setupNodeOnClick(node, link, data, panel) {
-    console.log('hi')
     const linksData = [...data.nonCanonicalLinks, ...data.canonicalLinks]
     node
         .on('click', function (_, n) {
