@@ -60,16 +60,20 @@ function update() {
 
     const incomingLinks = {}
     const outgoingLinks = {}
+    console.log(store.selectedNode.id)
     store.data.links.forEach(l => {
-        if (l.target.id == store.selectedNode.id) {
+        if (l.target == store.selectedNode.id) {
             if (!incomingLinks[l.kind]) incomingLinks[l.kind] = [l.source.id]
             else incomingLinks[l.kind].push(l.source.id)
         }
-        if (l.source.id == store.selectedNode.id) {
+        if (l.source == store.selectedNode.id) {
             if (!outgoingLinks[l.kind]) outgoingLinks[l.kind] = [l.target.id]
             else outgoingLinks[l.kind].push(l.target.id)
         }
     })
+
+    console.log('incomingLinks', incomingLinks)
+    console.log('outgoingLinks', outgoingLinks)
 
     this.select('p.node-context')
         .text('')

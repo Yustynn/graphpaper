@@ -69,8 +69,6 @@ function Tree(data, allData, panel, { // data is either tabular (array of object
     if (sort != null) root.sort(sort);
 
     // Compute the layout.
-    // const dx = 100;
-    // const dy = WIDTH / (root.height + padding);
     const dx = NODE_HEIGHT + 50
     const dy = NODE_WIDTH + 100
     tree().nodeSize([dx, dy])(root);
@@ -121,9 +119,6 @@ function Tree(data, allData, panel, { // data is either tabular (array of object
         .attr("height", NODE_HEIGHT)
         .attr("x", -NODE_WIDTH/2)
         .attr("y", -NODE_HEIGHT/2)
-
-    // if (title != null) node.append("title")
-    //     .text(d => title(d.data, d));
 
     // make label
     node.each(function (d) {
