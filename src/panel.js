@@ -72,11 +72,8 @@ function update() {
         }
     })
 
-    console.log('incomingLinks', incomingLinks)
-    console.log('outgoingLinks', outgoingLinks)
-
     this.select('p.node-context')
-        .text('')
+        .text(store.selectedNode.context.join(' '))
 
     this.select('p.narrative')
         .text('Nah bruh')

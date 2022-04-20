@@ -1,6 +1,7 @@
 import { select } from 'd3-selection'
 import * as d3Zoom from 'd3-zoom'
 import { COLORS, HEIGHT, WIDTH } from './constants'
+import store from './store'
 
 
 export default function setupSvg() {
@@ -35,10 +36,11 @@ export default function setupSvg() {
     const zoom = d3Zoom.zoom().on("zoom", e => {
         content.attr("transform", e.transform);
     });
+    store.zoom = zoom
 
     svg
         .call(zoom)
         .call(zoom.transform, d3Zoom.zoomIdentity)
-
+    
     return { svg, content }
 }

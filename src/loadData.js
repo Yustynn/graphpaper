@@ -9,6 +9,8 @@ export default async function loadData() {
     data.nodes = data.nodes.map(n => {
         if (!n.text) return n
 
+        n.context = (n.text.match(/%.*?%/g) || [])
+            .map(t => t.split('|')[0].slice(1))
         n.text = n.text.replaceAll(/%(.+?)\|/g, '').replaceAll('%', '')
         n.textChunks = mkTextChunks(n.text)
 

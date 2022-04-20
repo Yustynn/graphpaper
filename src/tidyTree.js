@@ -144,11 +144,24 @@ function Tree(data, allData, panel, { // data is either tabular (array of object
     return content.node();
 }
 
-
 function setupNodeOnClick(node, link, data, panel) {
     const linksData = [...data.nonCanonicalLinks, ...data.canonicalLinks]
     node
         .on('click', function (_, n) {
+            const panelWidth = document.querySelector('#panel').getBoundingClientRect().width
+            const tZoom = d3.transition().duration(500)
+            // const tf = new d3.ZoomTransform(1, n.y + panelWidth/2, n.x)
+            // console.log(tf)
+
+            d3.select('svg')
+                .transition(tZoom)
+                .call(store.zoom.translateTo, n.y + panelWidth/2, n.x)
+                // .call(store.zoom.transform, tf)
+
+            // d3.select('svg')
+            //     .transition(tZoom)
+            //     .call(store.zoom.scaleTo, 1)
+    
             const { id } = n
             store.selectedNode = n.data
 
