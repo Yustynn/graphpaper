@@ -1,17 +1,21 @@
 import { select } from 'd3-selection'
 import * as d3Force from 'd3-force'
 import { transition, easeLinear } from 'd3'
-import katex from 'katex'
 import store from './store'
 import loadData from './loadData'
 
 import {
+    CHUNK_LATEX,
+    CHUNK_TEXT,
+
     LINK_COLORS,
     LINK_THICKNESS,
+
     NODE_COLORS,
     NODE_PADDING,
     NODE_WIDTH,
     NODE_HEIGHT,
+
     HEIGHT,
     WIDTH,
 } from './constants'
@@ -81,11 +85,9 @@ function setupNodes(content, data, link, panel) {
                 .attr('y', NODE_PADDING)
                 .append('xhtml:p')
         
-        for (const { kind, text } of d.textChunks) {
-            const span = p.append('span')
-
-            if (kind == 'text') span.text(text)
-            else katex.render(text, span.node())
+        for (const chunk of d.chunks) {
+            if ([CHUNK_TEXT, CHUNK_LATEX].contains(chunk.kind))
+                p.append(chunk.htmlElement)
         }
 
 

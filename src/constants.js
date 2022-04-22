@@ -27,3 +27,7 @@ export const NODE_HEIGHT = 100
 export const NODE_PADDING = 10
 
 export const PANEL_WIDTH_RATIO = 1/3
+
+// Chunk kinds
+export const CHUNK_TEXT = 'text'
+export const CHUNK_LATEX = 'latex'

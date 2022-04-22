@@ -54,11 +54,9 @@ function update() {
     const nodeContent = this.select('p.node-content')
     nodeContent.html('')
 
-    for (const { kind, text } of store.selectedNode.textChunks) {
-        const span = nodeContent.append('span')
-
-        if (kind == 'text') span.text(text)
-        else katex.render(text, span.node())
+    for (const chunk of store.selectedNode.chunks) {
+        if ([CHUNK_TEXT, CHUNK_LATEX].contains(chunk.kind))
+            nodeContent.append(chunk.htmlElement.cloneNode())
     }
 
     const incomingLinks = {}

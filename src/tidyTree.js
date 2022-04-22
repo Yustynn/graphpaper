@@ -131,11 +131,8 @@ function Tree(data, allData, panel, { // data is either tabular (array of object
             .attr('y', NODE_PADDING - NODE_HEIGHT/2)
             .append('xhtml:p')
 
-        for (const { kind, text } of d.data.textChunks) {
-            const span = p.append('span')
-
-            if (kind == 'text') span.text(text)
-            else katex.render(text, span.node())
+        for (const chunk of d.data.chunks) {
+            p.node().append(chunk.htmlElement)
         }
     })
 
