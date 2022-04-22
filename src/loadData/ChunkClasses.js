@@ -7,7 +7,6 @@ export class Chunk {
         this.kind = kind
     }
 
-    // overriden for ContextChunk
     attachToD3Element(d3Element) {
         d3Element.node().append(this.htmlElement.cloneNode(true))
     }
@@ -88,18 +87,14 @@ export class LatexChunk extends Chunk {
 }
 
 export class ContextChunk extends Chunk {
-    // The nearer the value of %cf|$f_A(x)$% to unity, the higher the grade of membership of %x|$x$% in %A|$A$%
     constructor(raw) {
         super(CHUNK_CONTEXT)
+
         const [contextName, content] = raw.slice(1, raw.length-1).split('|')
         this.contextName = contextName
-        // if content is undefinied, then content == context name
+        this.htmlElement = d3.create('span').classed('context-text', true).node()
         this.children = Chunk.mkTextAndLatexChunks(content || contextName) 
-    }
 
-    attachToD3Element(d3Element) {
-        for (const child of this.children)
-            child.attachToD3Element(d3Element)
+        this.children.forEach(n => this.htmlElement.append(n.htmlElement))
     }
 }
-

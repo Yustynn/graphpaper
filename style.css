@@ -19,3 +19,7 @@ html, body {
 #panel-content {
     padding: 10px 30px;
 }
+
+.context-text {
+    color: blue;
+}
