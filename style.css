@@ -7,6 +7,10 @@ html, body {
 
 }
 
+.context-text {
+    color: blue;
+}
+
 #svg-container {
     height: 100%;
     width: 100%;
@@ -20,6 +24,6 @@ html, body {
     padding: 10px 30px;
 }
 
-.context-text {
-    color: blue;
+#panel-content .context-text {
+    color: white;
 }

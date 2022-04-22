@@ -57,8 +57,7 @@ function update() {
     console.log(store.selectedNode)
 
     for (const chunk of store.selectedNode.chunks) {
-        if ([CHUNK_TEXT, CHUNK_LATEX].includes(chunk.kind))
-            chunk.attachToD3Element(nodeContent)
+        chunk.attachToD3Element(nodeContent)
     }
 
     const incomingLinks = {}
@@ -75,7 +74,7 @@ function update() {
         }
     })
 
-    const ul = this.select('p.node-context').append('ul')
+    const ul = this.select('p.node-context').html('').append('ul')
     for (const chunk of store.selectedNode.contextChunks) {
         chunk.attachToD3Element(ul.append('li'))
     }
