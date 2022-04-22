@@ -27,3 +27,7 @@ html, body {
 #panel-content .context-text {
     color: white;
 }
+
+#panel-content .context-button .context-text {
+    color: black;
+}

@@ -2,6 +2,7 @@ import * as d3 from 'd3'
 import { NODE_WIDTH, NODE_HEIGHT, NODE_PADDING, LINK_COLORS } from './constants'
 import katex from 'katex'
 import store from './store'
+import { setSelectedNode } from './storeActions'
 import _ from 'lodash'
 
 export default function main(content, data, panel) {
@@ -20,6 +21,7 @@ function rootToNodeMap(root) {
     const map = new Map()
     traverse(root)
 
+    store.nodeIdToTreeNode = map
     return map
 
     function traverse(node) {
@@ -143,43 +145,7 @@ function setupNodeOnClick(node, link, data, panel) {
     const linksData = [...data.nonCanonicalLinks, ...data.canonicalLinks]
     node
         .on('click', function (_, n) {
-            const panelWidth = document.querySelector('#panel').getBoundingClientRect().width
-            const tZoom = d3.transition().duration(500)
-            // const tf = new d3.ZoomTransform(1, n.y + panelWidth/2, n.x)
-            // console.log(tf)
-
-            d3.select('svg')
-                .transition(tZoom)
-                .call(store.zoom.translateTo, n.y + panelWidth/2, n.x)
-                // .call(store.zoom.transform, tf)
-
-            // d3.select('svg')
-            //     .transition(tZoom)
-            //     .call(store.zoom.scaleTo, 1)
-    
-            const { id } = n
-            store.selectedNode = n.data
-
-            store.visibleNodes.clear()
-            store.visibleNodes.add(id)
-            linksData
-                .filter(l => l.source.id == id || l.target.id == id)
-                .forEach(l => {
-                    store.visibleNodes.add(l.source.id)
-                    store.visibleNodes.add(l.target.id)
-                })
-
-            const t = d3.transition()
-                .duration(100)
-                .ease(d3.easeLinear)
-
-
-            node.transition(t)
-                .style('opacity', d => store.visibleNodes.has(d.id) ? 1 : 0)
-
-            link.transition(t)
-                .style('opacity', l => l.source.id == id || l.target.id == id ? 1 : 0)
-
+            setSelectedNode(n)
             d3.select(this).select('rect')
                 .attr('fill', 'white')
 

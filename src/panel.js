@@ -1,6 +1,7 @@
 import { CHUNK_LATEX, CHUNK_TEXT, COLORS, LINK_COLORS, PANEL_WIDTH_RATIO } from './constants'
 import katex from 'katex'
 import store from './store'
+import { setSelectedNode } from './storeActions'
 
 function mkText(parent, element, text, cls) {
     return parent.append(element)
@@ -62,7 +63,6 @@ function update() {
 
     const incomingLinks = {}
     const outgoingLinks = {}
-    console.log(store.selectedNode.id)
     store.data.links.forEach(l => {
         if (l.target == store.selectedNode.id) {
             if (!incomingLinks[l.kind]) incomingLinks[l.kind] = [l.source.id]
@@ -76,9 +76,18 @@ function update() {
 
     const ul = this.select('p.node-context').html('').append('ul')
     for (const chunk of store.selectedNode.contextChunks) {
-        chunk.attachToD3Element(ul.append('li'))
-    }
+        const button = ul.append('li').append('button').classed('context-button', true)
+        chunk.attachToD3Element(button)
+        const contextNodeId = store.data.contextNameToNodeId[chunk.contextName]
+        const contextNode = store.nodeIdToTreeNode.get(contextNodeId)
 
+        if (contextNodeId !== undefined) 
+            button.on('click', () => {
+                setSelectedNode(contextNode)
+                this.update()
+            })
+
+    }
 
     this.select('p.narrative')
         .text('Nah bruh')
