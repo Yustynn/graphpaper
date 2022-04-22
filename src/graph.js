@@ -87,7 +87,7 @@ function setupNodes(content, data, link, panel) {
         
         for (const chunk of d.chunks) {
             if ([CHUNK_TEXT, CHUNK_LATEX].contains(chunk.kind))
-                p.append(chunk.htmlElement)
+                p.node().append(chunk.htmlElement)
         }
 
 
