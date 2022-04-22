@@ -54,6 +54,8 @@ function update() {
     const nodeContent = this.select('p.node-content')
     nodeContent.html('')
 
+    console.log(store.selectedNode)
+
     for (const chunk of store.selectedNode.chunks) {
         if ([CHUNK_TEXT, CHUNK_LATEX].includes(chunk.kind))
             chunk.attachToD3Element(nodeContent)

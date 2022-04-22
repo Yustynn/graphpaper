@@ -14,30 +14,21 @@ export class Chunk {
 
     static mkChunks(text) {
         const matches = text.match(/%.*?%/g)
-        let chunks = [new TextChunk(text)]
 
         if (matches === null) return Chunk.mkTextAndLatexChunks(text)
 
-
-        for (let match of matches) {
-            const processedChunks = []
-            for (let chunk of chunks) {
-                if (chunk.kind != CHUNK_TEXT) {
-                    processedChunks.push(chunk)
-                    continue
-                }
-                const chunkFragments = chunk.content.split(match)
-                for (let fragment of chunkFragments.slice(0, chunkFragments.length-1)) {
-                    processedChunks.push(new TextChunk(fragment))
-                    processedChunks.push(new ContextChunk(match))
-                }
-                processedChunks.push(new TextChunk(chunkFragments[chunkFragments.length-1]))
-
-            }
-            chunks = processedChunks
+        const match = matches[0]
+        let processedChunks = []
+        const chunkFragments = text.split(match)
+        for (let fragment of chunkFragments.slice(0, chunkFragments.length-1)) {
+            processedChunks = processedChunks.concat(Chunk.mkChunks(fragment))
+            processedChunks.push(new ContextChunk(match))
         }
+        const lastFragment = chunkFragments[chunkFragments.length-1]
+        if (lastFragment)
+            processedChunks = processedChunks.concat(Chunk.mkChunks(lastFragment))
 
-        return chunks
+        return processedChunks
     }
 
     static mkTextAndLatexChunks(text) {
