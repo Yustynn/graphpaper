@@ -1,4 +1,4 @@
-import { COLORS, LINK_COLORS, PANEL_WIDTH_RATIO } from './constants'
+import { CHUNK_LATEX, CHUNK_TEXT, COLORS, LINK_COLORS, PANEL_WIDTH_RATIO } from './constants'
 import katex from 'katex'
 import store from './store'
 
@@ -55,8 +55,8 @@ function update() {
     nodeContent.html('')
 
     for (const chunk of store.selectedNode.chunks) {
-        if ([CHUNK_TEXT, CHUNK_LATEX].contains(chunk.kind))
-            nodeContent.append(chunk.htmlElement.cloneNode())
+        if ([CHUNK_TEXT, CHUNK_LATEX].includes(chunk.kind))
+            chunk.attachToD3Element(nodeContent)
     }
 
     const incomingLinks = {}
@@ -73,8 +73,11 @@ function update() {
         }
     })
 
-    this.select('p.node-context')
-        .text(store.selectedNode.context.join(' '))
+    const ul = this.select('p.node-context').append('ul')
+    for (const chunk of store.selectedNode.contextChunks) {
+        chunk.attachToD3Element(ul.append('li'))
+    }
+
 
     this.select('p.narrative')
         .text('Nah bruh')

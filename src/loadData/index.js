@@ -1,6 +1,6 @@
 import store from '../store'
-import { GRAPH_DATA_PATH } from '../constants';
-import { Chunk, } from './ChunkClasses'
+import { CHUNK_CONTEXT, GRAPH_DATA_PATH } from '../constants';
+import { Chunk } from './ChunkClasses'
 import * as d3 from 'd3'
 
 export default async function loadData() {
@@ -10,10 +10,8 @@ export default async function loadData() {
     data.nodes = data.nodes.map(n => {
         if (!n.text) return n
 
-        n.context = (n.text.match(/%.*?%/g) || [])
-            .map(t => t.split('|')[0].slice(1))
-        n.text = n.text.replaceAll(/%(.+?)\|/g, '').replaceAll('%', '')
-        n.chunks = Chunk.mkTextAndLatexChunks(n.text)
+        n.chunks = Chunk.mkChunks(n.text)
+        n.contextChunks = n.chunks.filter(c => c.kind == CHUNK_CONTEXT)
 
         return n
     })

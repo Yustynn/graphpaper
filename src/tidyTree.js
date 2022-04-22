@@ -131,9 +131,7 @@ function Tree(data, allData, panel, { // data is either tabular (array of object
             .attr('y', NODE_PADDING - NODE_HEIGHT/2)
             .append('xhtml:p')
 
-        for (const chunk of d.data.chunks) {
-            p.node().append(chunk.htmlElement)
-        }
+        d.data.chunks.forEach(chunk => chunk.attachToD3Element(p))
     })
 
     setupNodeOnClick(node, link, allData, panel)
