@@ -121,6 +121,7 @@ function Tree(data, allData, panel, { // data is either tabular (array of object
         .attr("height", NODE_HEIGHT)
         .attr("x", -NODE_WIDTH/2)
         .attr("y", -NODE_HEIGHT/2)
+        .attr('id', d => `node-${d.data.id}`)
 
     // make label
     node.each(function (d) {
@@ -146,11 +147,7 @@ function setupNodeOnClick(node, link, data, panel) {
     node
         .on('click', function (_, n) {
             setSelectedNode(n)
-            d3.select(this).select('rect')
-                .attr('fill', 'white')
-
             panel.show()
-
             panel.update()
         })
 }
