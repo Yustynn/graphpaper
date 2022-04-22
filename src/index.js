@@ -1,4 +1,3 @@
-import makeGraph from './graph'
 import setupSvg from './setup'
 import makePanel from './panel'
 import mockData from './mockData'
@@ -23,7 +22,6 @@ function removeNonCanonicalLinks(data) {
 async function main() {
   const { svg, content } = setupSvg()
   const panel = makePanel(svg)
-  // await makeGraph(content, panel)
 
   const raw = await loadData()
   // there's an error in the data where source and target are swapped. This is a temp fix.
