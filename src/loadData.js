@@ -23,6 +23,7 @@ export default async function loadData() {
 }
 
 function mkTextChunks(text) {
+    // The nearer the value of %cf|$f_A(x)$% to unity, the higher the grade of membership of %x|$x$% in %A|$A$%
     // this is a hacky solution to help render latex :(
 
     const matches = text.match(/\$.*?\$/g)

@@ -188,10 +188,7 @@ function setupNodeOnClick(node, link, data, panel) {
             d3.select(this).select('rect')
                 .attr('fill', 'white')
 
-            panel
-                .transition()
-                .duration(300)
-                .style('transform', `translate(${window.innerWidth / 2}px,0)`)
+            panel.show()
 
             panel.update()
         })

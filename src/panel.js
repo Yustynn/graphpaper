@@ -1,4 +1,4 @@
-import { COLORS, LINK_COLORS } from './constants'
+import { COLORS, LINK_COLORS, PANEL_WIDTH_RATIO } from './constants'
 import katex from 'katex'
 import store from './store'
 
@@ -15,7 +15,7 @@ export default function(svg) {
 
     const panelContent = panel.append('foreignObject')
         .attr('height', '100%')
-        .attr('width', window.innerWidth/2)
+        .attr('width', window.innerWidth * PANEL_WIDTH_RATIO)
         .append('xhtml:div')
             .attr('id', 'panel-content')
             .style('background-color', COLORS[2])
@@ -42,6 +42,9 @@ export default function(svg) {
     mkText(panelContent, 'p', 'Narrative', 'narrative')
 
     panel.update = update.bind(panel)
+    panel.showOrHide = showOrHide.bind(panel)
+    panel.show = show.bind(panel)
+    panel.hide = hide.bind(panel)
 
     return panel
 }
@@ -89,4 +92,21 @@ function update() {
         )
 
     }
+}
+
+function showOrHide(isShow) {
+    const tx = isShow ? window.innerWidth * (1 - PANEL_WIDTH_RATIO) : window.innerWidth
+
+    this
+        .transition()
+        .duration(300)
+        .style('transform', `translate(${tx}px,0)`)
+}
+
+function show() {
+    this.showOrHide(true)
+}
+
+function hide() {
+    this.showOrHide(false)
 }

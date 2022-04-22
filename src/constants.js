@@ -25,3 +25,5 @@ export const LINK_THICKNESS = 7
 export const NODE_WIDTH = 250
 export const NODE_HEIGHT = 100
 export const NODE_PADDING = 10
+
+export const PANEL_WIDTH_RATIO = 1/3
