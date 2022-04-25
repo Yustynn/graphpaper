@@ -24,8 +24,8 @@ async function main() {
   const panel = makePanel(svg)
 
   const raw = await loadData()
-  // there's an error in the data where source and target are swapped. This is a temp fix.
-  raw.links = raw.links.map(l => ({ ...l, source: l.target, target: l.source})) 
+  // // there's an error in the data where source and target are swapped. This is a temp fix.
+  // raw.links = raw.links.map(l => ({ ...l, source: l.target, target: l.source})) 
   console.log('raw', raw)
 
   const data = processData(raw)

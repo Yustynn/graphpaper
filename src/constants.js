@@ -17,7 +17,7 @@ export const NODE_COLORS = {
     root: 'white',
 }
 
-export const GRAPH_DATA_PATH = './data/graph.json'
+export const GRAPH_DATA_PATH = '/data/graph.json'
 
 export const [WIDTH, HEIGHT] = [1000, 700]
 

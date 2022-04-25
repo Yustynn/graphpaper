@@ -28,6 +28,7 @@ function addChildren(data) {
 
     for (let { source, target } of links) {
         const node = mapping.get(source)
+        if (!mapping.get(target)) debugger;
         node.children.push(mapping.get(target))
     }
 }

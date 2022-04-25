@@ -7,7 +7,6 @@ export default async function loadData() {
     const data = await d3.json(GRAPH_DATA_PATH);
 
     data.contextNameToNodeId = {}
-    // for now, just remove context
     data.nodes = data.nodes.map(n => {
         if (!n.text) return n
 
