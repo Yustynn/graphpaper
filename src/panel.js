@@ -76,10 +76,26 @@ function update() {
 
     const ul = this.select('p.node-context').html('').append('ul')
     for (const chunk of store.selectedNode.contextChunks) {
-        const button = ul.append('li').append('button').classed('context-button', true)
-        chunk.attachToD3Element(button)
+        const li = ul.append('li')
+        const header = li.append('h3')
+            .classed('context-header', true)
+        const button = li.append('button')
+            .classed('context-button', true)
+            .text('Go to node')
+        chunk.attachToD3Element(header)
+
         const contextNodeId = store.data.contextNameToNodeId[chunk.contextName]
         const contextNode = store.nodeIdToTreeNode.get(contextNodeId)
+
+        // add content
+        if (contextNode) {
+            const contextNodeContent = li.append('p').classed('context-node-text', true)
+
+            for (const chunk of contextNode.data.chunks) {
+                chunk.attachToD3Element(contextNodeContent)
+            }
+        }
+
 
         if (contextNodeId !== undefined) 
             button.on('click', () => {
