@@ -1,6 +1,6 @@
 export const COLORS = {
-    1: '#1c222d', // used for background of svg
-    2: '#242424',
+    1: '#1c222d', // background of svg
+    2: '#3a3a3a', // panel coler
 }
 
 export const LINK_COLORS = {
