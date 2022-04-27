@@ -8,6 +8,7 @@ LINK_TYPE_MAP = {
     'd': 'definition',
     'el': 'elaboration',
     's': 'synonym',
+    'su': 'support',
     'ex': 'example',
 }
 
@@ -51,8 +52,11 @@ for r in raw.itertuples():
 
     nodes.append(node)
 
+print(f"Num nodes: {len(nodes)}")
 # strip out links with non-existent nodes (because they haven't been inputted into gsheets yet)
+print(f"Original number of links: {len(links)}")
 links = [l for l in links if l['target'] in node_ids]
+print(f"Reduced number of links: {len(links)}")
 
 # save
 with open(OUTPUT_PATH, 'w') as f:
