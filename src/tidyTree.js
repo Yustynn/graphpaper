@@ -164,7 +164,7 @@ function Tree(data, allData, panel, { // data is either tabular (array of object
         .attr('class', n => getNodeKind(n.data))
         .attr('fill', n => {
             const raw = LINK_COLORS[getNodeKind(n.data)]
-            return Color(raw).lighten(0.5).string()
+            return Color(raw).lighten(0.7).string()
         })
 
     // make label

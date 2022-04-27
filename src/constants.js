@@ -1,13 +1,13 @@
 export const COLORS = {
-    1: '#2D4263',
+    1: '#1c222d', // used for background of svg
     2: '#242424',
 }
 
 export const LINK_COLORS = {
     chunk: 'white',
     default: 'white',
-    definition: 'red',
-    elaboration: 'orange',
+    definition: '#db0a5b',
+    elaboration: '#f9690e',
     example: 'pink',
     support: 'seagreen',
     synonym: 'skyblue',
