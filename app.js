@@ -3267,7 +3267,7 @@
       root: 'white',
   };
 
-  const GRAPH_DATA_PATH = '/data/graph.json';
+  const GRAPH_DATA_PATH = './data/graph.json';
 
   const [WIDTH, HEIGHT] = [1000, 700];
   const NODE_WIDTH = 250;
