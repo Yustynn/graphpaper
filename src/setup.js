@@ -1,6 +1,6 @@
 import { select } from 'd3-selection'
 import * as d3Zoom from 'd3-zoom'
-import { COLORS, HEIGHT, WIDTH } from './constants'
+import { COLORS, LINK_COLORS, HEIGHT, WIDTH } from './constants'
 import store from './store'
 
 
@@ -29,6 +29,9 @@ export default function setupSvg() {
         .attr('fill', COLORS[1])
         .attr('class', 'bg')
 
+    // make legend
+    mkLegend()
+
     // make container
     const content = svg.append('g')
         .attr('class', 'content')
@@ -44,3 +47,34 @@ export default function setupSvg() {
     
     return { svg, content }
 }
+
+function mkLegend() {
+    const R = 10
+    const startX = 30
+    const startY = 30
+
+    select('svg')
+        .append('g')
+        .attr('id', 'legends')
+        .selectAll('g')
+        .data(Object.entries(LINK_COLORS))
+        .join('g')
+            .classed('legend', true)
+            .each(function([kind, color], idx) {
+                console.log(kind, color)
+                const sel = select(this)
+                const y = idx * 30 + 10
+                sel.append('circle')
+                    .attr('fill', color)
+                    .attr('r', R)
+                    .attr('cx', startX)
+                    .attr('cy', startY + y)
+                sel.append('text')
+                    .text(kind)
+                    .attr('fill', color)
+                    .attr('x', startX + 20)
+                    .attr('y', startY + y + R/2)
+                    .attr('text-anchor', 'center')
+            })
+}
+

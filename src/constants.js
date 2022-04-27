@@ -4,7 +4,6 @@ export const COLORS = {
 }
 
 export const LINK_COLORS = {
-    chunk: 'white',
     default: 'white',
     definition: '#db0a5b',
     elaboration: '#f9690e',
