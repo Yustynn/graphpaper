@@ -106,7 +106,7 @@ function update() {
     }
 
     this.select('p.narrative')
-        .text('Nah bruh')
+        .text('(not built yet)')
 
     for (const [links, cls] of [[incomingLinks, 'incoming-links'], [outgoingLinks, 'outgoing-links']]) {
         const p = this.select(`p.${cls}`)
