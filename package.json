@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "color": "^4.2.3",
     "d3": "^7.3.0",
     "d3-textwrap": "^3.0.0",
     "katex": "^0.15.2",

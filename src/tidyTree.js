@@ -1,9 +1,15 @@
 import * as d3 from 'd3'
-import { NODE_WIDTH, NODE_HEIGHT, NODE_PADDING, LINK_COLORS } from './constants'
-import katex from 'katex'
+import {
+    NODE_WIDTH,
+    NODE_HEIGHT,
+    NODE_PADDING,
+    NODE_COLORS,
+    LINK_COLORS
+} from './constants'
 import store from './store'
 import { setSelectedNode } from './storeActions'
 import _ from 'lodash'
+import Color from 'color'
 
 export default function main(content, data, panel) {
     return Tree(data.nodes, data, panel, {
@@ -50,7 +56,7 @@ function Tree(data, allData, panel, { // data is either tabular (array of object
     sort, // how to sort nodes prior to layout (e.g., (a, b) => d3.descending(a.height, b.height))
     linkD, // given a node d, its link (if any)
     linkTarget = "_blank", // the target attribute for links (if any)
-    fill = "MediumSeaGreen", // fill for nodes
+    fill = NODE_COLORS.default, // fill for nodes
     stroke = "#aaa", // stroke for links
     strokeWidth = 3, // stroke width for links
     strokeLinejoin, // stroke line join for links
@@ -93,10 +99,42 @@ function Tree(data, allData, panel, { // data is either tabular (array of object
     const nodeMap = rootToNodeMap(root)
     const nonCanonicalLinksProcessed = processRawLinks(nonCanonicalLinks, nodeMap)
     const canonicalLinksProcessed = processRawLinks(canonicalLinks, nodeMap)
+    const links = [...canonicalLinksProcessed, ...nonCanonicalLinksProcessed]
+
+    // for node coloring
+    const targetIdToLinkKinds = new Map()
+    for (const { target, kind } of links) {
+        const { id } = target.data
+        if (!targetIdToLinkKinds.has(id)) targetIdToLinkKinds.set(id, [])
+
+        targetIdToLinkKinds.get(id).push(kind)
+    }
+
+    function getNodeKind(node) {
+        const kindCounter = {}
+        if (!targetIdToLinkKinds.has(node.id)) return 'default'
+
+        const kinds = targetIdToLinkKinds.get(node.id)
+        for (const kind of kinds) {
+            if (!kindCounter[kind]) kindCounter[kind] = 0
+            kindCounter[kind] += 1
+        }
+
+        const entries = Object.entries(kindCounter)
+        let [currKind, currMax] = entries[0]
+        for (const [kind, count] in entries.slice(1)) {
+            if (count > currMax) {
+                currMax = count
+                currKind = kind
+            }
+        }
+
+        return currKind
+    }
 
     const link = pathContainer
         .selectAll("path")
-        .data([...canonicalLinksProcessed, ...nonCanonicalLinksProcessed])
+        .data(links)
         .join("path")
         .attr("d", d3.linkHorizontal()
             .x(d => d.y)
@@ -116,12 +154,18 @@ function Tree(data, allData, panel, { // data is either tabular (array of object
 
     // make rectangle
     node.append("rect")
-        .attr("fill", d => d.children ? stroke : fill)
+        // .attr("fill", d => d.children ? stroke : fill)
+        .attr("fill", fill)
         .attr("width", NODE_WIDTH)
         .attr("height", NODE_HEIGHT)
         .attr("x", -NODE_WIDTH/2)
         .attr("y", -NODE_HEIGHT/2)
         .attr('id', d => `node-${d.data.id}`)
+        .attr('class', n => getNodeKind(n.data))
+        .attr('fill', n => {
+            const raw = LINK_COLORS[getNodeKind(n.data)]
+            return Color(raw).lighten(0.5).string()
+        })
 
     // make label
     node.each(function (d) {

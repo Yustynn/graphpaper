@@ -5,15 +5,16 @@ export const COLORS = {
 
 export const LINK_COLORS = {
     chunk: 'white',
+    default: 'white',
     definition: 'red',
     elaboration: 'orange',
     example: 'pink',
-    support: 'green',
+    support: 'seagreen',
     synonym: 'skyblue',
 }
 
 export const NODE_COLORS = {
-    default: 'yellow',
+    default: 'white',
     root: 'white',
 }
 
