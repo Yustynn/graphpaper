@@ -11,6 +11,18 @@ html, body {
     color: blue;
 }
 
+.node-context ul {
+    list-style: none;
+    padding: 0;
+}
+
+.context-button {
+    background: white;
+    border: none;
+    padding: 5px 10px;
+    margin-bottom: 5px;
+}
+
 #svg-container {
     height: 100%;
     width: 100%;
