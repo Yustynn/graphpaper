@@ -61,3 +61,15 @@ rect.active {
 .context-header {
     margin-bottom: 5px;
 }
+
+#link-to-slides {
+    display: flex;
+    justify-content: center;
+    background: #4a4a4a;
+}
+
+#link-to-slides a {
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+}
